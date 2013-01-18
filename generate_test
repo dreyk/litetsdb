@@ -1,0 +1,60 @@
+#!/bin/bash
+echo "****************************"
+echo "GENERATING CLOUD!"
+OS_FAMALY=$(uname)
+USAGE="Usage: `basename $0` -n nodecount -h http_port -p handoff_port -a ip_address"
+while getopts n:h:a:p:t: c
+do
+	case $c in
+	n)	NODE_COUNT=$OPTARG;;
+	h)  HTTP_PORT_START=$OPTARG;;
+	p)  HANDOFF_PORT_START=$OPTARG;;
+	a)  IP_ADDRESS=$OPTARG;;
+	?)	echo $USAGE
+		exit 2;;
+esac
+done
+rm -rf test/debug
+mkdir test/debug
+HOME=$(pwd)
+echo $HOME
+case $OS_FAMALY in
+	Linux) TEST_FILE=test_linux;;
+	*)	TEST_FILE=test_win.bat;;
+esac
+
+ETSDB_DEPS=$ETSDB_HOME
+if [ -d "../etsdb/" ]; then
+    ETSDB_HOME="../../../../etsdb_projects"
+    ETSDB_DEPS="../../../.."
+elif [ -d "deps/etsdb" ]; then
+    ETSDB_HOME="../../../"
+    ETSDB_DEPS=$ETSDB_HOME/deps
+fi
+
+
+
+for (( i=1; i<$NODE_COUNT+1; i++ ))
+do
+	echo "	generate $i'th node =>"
+	NODE_NAME="dev$i"
+	TEST_NAME=test/debug/$NODE_NAME
+	mkdir $TEST_NAME
+	mkdir $TEST_NAME/log
+	mkdir $TEST_NAME/ring
+	mkdir $TEST_NAME/snmp_configs
+	APP_PARAM="-config dev.config -name $NODE_NAME@$IP_ADDRESS"
+	cat test/$TEST_FILE | sed -e "s/{{app_param}}/$APP_PARAM/g" | \
+	sed -e "s|{{etsdb_h}}|$ETSDB_HOME|g" | sed -e "s|{{etsdb_deps}}|$ETSDB_DEPS|g" > $TEST_NAME/$TEST_FILE
+	chmod +x $TEST_NAME/$TEST_FILE
+	cat test/dev.config | sed -e "s/{{web_port}}/$HTTP_PORT_START/g" | \
+	sed -e "s/{{handoff_port}}/$HANDOFF_PORT_START/g" | \
+	sed -e "s/{{web_ip}}/$IP_ADDRESS/g" > $TEST_NAME/dev.config
+	cd $TEST_NAME
+	start $TEST_FILE
+	cd $HOME
+	let "HTTP_PORT_START+=1"
+	let "HANDOFF_PORT_START+=1"
+	let "THRIFT_PORT_START+=1"
+done
+echo "DONE"
