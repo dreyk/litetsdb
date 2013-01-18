@@ -1,0 +1,9 @@
+ETSDB_HOME={{etsdb_h}}
+ETSDB_DEPS={{etsdb_deps}}
+export ETSDB_HOME
+export ETSDB_DEPS
+
+export ERL_LIBS=$ETSDB_DEPS/basho_stats:$ETSDB_DEPS/bear:$ETSDB_DEPS/etsdb:$ETSDB_DEPS/folsom:$ETSDB_DEPS/lager:$ETSDB_DEPS/meck:$ETSDB_DEPS/mochiweb:$ETSDB_DEPS/poolboy:$ETSDB_DEPS/protobuffs:$ETSDB_DEPS/riak_core:$ETSDB_DEPS/riak_sysmon:$ETSDB_DEPS/webmachine
+
+erl {{app_param}} -setcookie etsdb
+

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project basedir="." default="compile" name="zont_core">
+	<target name="checkos">
+		<condition property="isWindows" value="true">
+			<os family="windows" />
+		</condition>
+		<condition property="isLinux" value="true">
+			<os family="unix" />
+		</condition>
+	</target>
+	<target name="deps" depends="deps_w,deps_l"/>
+	<target name="deps_w" depends="checkos" if="isWindows">
+		<property name="rebar" value="rebar.bat"/>
+	</target>
+	<target name="deps_l" depends="checkos" if="isLinux">
+		<property name="rebar" value="./rebar"/>
+	</target>
+
+	<target name="compile" depends="deps">
+		<exec executable="${rebar}">
+			<arg value="compile"/>
+			<arg line="deps_dir=../"/>
+		</exec>
+	</target>
+	<target name="docs" depends="deps">
+			<exec executable="${rebar}">
+				<arg value="skip_deps=true doc"/>
+			</exec>
+	</target>
+	<target name="clean" depends="deps">
+		<exec executable="${rebar}">
+			<arg value="clean"/>
+			<arg line="deps_dir=../"/>
+		</exec>
+	</target>
+	<target name="get-deps" depends="deps">
+		<exec executable="${rebar}">
+			<arg line="get-deps deps_dir=../"/>
+		</exec>
+	</target>
+	<target name="update-deps" depends="deps">
+			<exec executable="${rebar}">
+				<arg line="update-deps deps_dir=../"/>
+			</exec>
+	</target>
+	<target name="execute1">
+		<exec executable="bash">
+			<arg line="generate_test -n 1 -h 7098 -p 6051 -a 127.0.0.1"/>
+		</exec>
+	</target>
+	<target name="execute2">
+		<exec executable="bash">
+			<arg line="generate_test -n 3 -h 7098 -p 6051 -a 127.0.0.1"/>
+		</exec>
+	</target>
+	<target name="execute3">
+		<exec executable="bash">
+			<arg line="generate_test -n 3 -h 7098 -p 6051 -a 127.0.0.1"/>
+		</exec>
+	</target>
+	<target name="execute6">
+			<exec executable="bash">
+				<arg line="generate_test -n 6 -h 7098 -p 6051 -t 6001 -a 127.0.0.1"/>
+			</exec>
+	</target>
+</project>

@@ -1,5 +1,9 @@
 .eunit
-deps
-*.o
-*.beam
-*.plt
+deps/*
+test/debug
+*~
+dev/*
+doc/*
+rel/etsdb
+ebin/*
+/rebar.config.script
