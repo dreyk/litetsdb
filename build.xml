@@ -60,7 +60,7 @@
 	</target>
 	<target name="execute6">
 			<exec executable="bash">
-				<arg line="generate_test -n 6 -h 7098 -p 6051 -t 6001 -a 127.0.0.1"/>
+				<arg line="generate_test -n 6 -h 7098 -p 6051 -a 127.0.0.1"/>
 			</exec>
 	</target>
 </project>
