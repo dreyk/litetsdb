@@ -31,7 +31,7 @@ update_node()
   cd ${DIR_TO_COPY}
   scp -rq * ${DB_USER}@${NODE_NAME}:${DEST_DIR}
   echo "OK"
-  ssh ${DB_USER}@${NODE_NAME} mkdir -p tmp
+  ssh ${DB_USER}@${NODE_NAME} mkdir -p ${DEST_DIR}/tmp
   ( cat <<_EOF_
 #!/bin/bash
 cd ~/etc
@@ -40,15 +40,15 @@ DEST_DIR=$2
 export NODE_NAME
 export DEST_DIR
 echo Node address: \${NODE_NAME}
-cd ${DEST_DIR}
+cd ${DEST_DIR}/etc
 cp vm.args vm.args.release
 sed 's/^-name .*\$/-name ${DB_VM}@'\${NODE_NAME}'/' vm.args.release > vm.args
 rm vm.args.release
 cd ../
-rm -rf /tmp/conf_updater.sh
+rm -rf ${DEST_DIR}/tmp/conf_updater.sh
 _EOF_
-  ) | ssh ${DB_USER}@${NODE_NAME} "cat > /tmp/conf_updater.sh"
-  ssh ${DB_USER}@${NODE_NAME} "chmod +x /tmp/conf_updater.sh; /tmp/conf_updater.sh ${NODE_NAME} ${DEST_DIR}"
+  ) | ssh ${DB_USER}@${NODE_NAME} "cat > ${DEST_DIR}/tmp/conf_updater.sh"
+  ssh ${DB_USER}@${NODE_NAME} "chmod +x ${DEST_DIR}/tmp/conf_updater.sh; ${DEST_DIR}/tmp/conf_updater.sh ${NODE_NAME} ${DEST_DIR}"
 }
 
 if [ ! -f ${LIST_FILE} ]; then
