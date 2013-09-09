@@ -45,10 +45,10 @@ cp vm.args vm.args.release
 sed 's/^-name .*\$/-name ${DB_VM}@'\${NODE_NAME}'/' vm.args.release > vm.args
 rm vm.args.release
 cd ../
-rm -rf ~/tmp/conf_updater.sh
+rm -rf /tmp/conf_updater.sh
 _EOF_
-  ) | ssh ${DB_USER}@${NODE_NAME} "cat > ~/tmp/conf_updater.sh"
-  ssh ${DB_USER}@${NODE_NAME} "chmod +x ~/tmp/conf_updater.sh; ~/tmp/conf_updater.sh ${NODE_NAME} ${DEST_DIR}"
+  ) | ssh ${DB_USER}@${NODE_NAME} "cat > /tmp/conf_updater.sh"
+  ssh ${DB_USER}@${NODE_NAME} "chmod +x /tmp/conf_updater.sh; /tmp/conf_updater.sh ${NODE_NAME} ${DEST_DIR}"
 }
 
 if [ ! -f ${LIST_FILE} ]; then
