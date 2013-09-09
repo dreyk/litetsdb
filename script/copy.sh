@@ -29,12 +29,12 @@ update_node()
   echo -n "Coping... "
   # copy main application
   cd ${DIR_TO_COPY}
+  ssh ${DB_USER}@${NODE_NAME} mkdir -p ${DEST_DIR}
   scp -rq * ${DB_USER}@${NODE_NAME}:${DEST_DIR}
   echo "OK"
   ssh ${DB_USER}@${NODE_NAME} mkdir -p ${DEST_DIR}/tmp
   ( cat <<_EOF_
 #!/bin/bash
-cd ~/etc
 NODE_NAME=$1
 DEST_DIR=$2
 export NODE_NAME

@@ -4,6 +4,6 @@ test/debug
 *~
 dev/*
 doc/*
-rel/etsdb
+rel/litetsdb
 ebin/*
 /rebar.config.script
