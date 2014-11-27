@@ -6,4 +6,9 @@ dev/*
 doc/*
 rel/litetsdb
 ebin/*
-/rebar.config.script
+test/data
+test/log
+.idea/
+test/console.log
+test/error.log
+test/ring
